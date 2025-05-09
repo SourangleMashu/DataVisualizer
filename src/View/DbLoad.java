@@ -13,12 +13,12 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class DbDownload extends JDialog {
+public class DbLoad extends JDialog {
     private JComboBox<String> databaseComboBox;
     private JButton confirmButton;
 
     // Constructor
-    public DbDownload() {
+    public DbLoad() {
 
         // Tried to use super() to get rid of the empty JFrame after dispose.
         super(Application.mainFrame, "Database Selection", true);

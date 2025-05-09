@@ -34,7 +34,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import Controller.DbController;
 import View.DataChooser;
-import View.DbDownload;
+import View.DbLoad;
 import View.DbPanel;
 import View.DbUpload;
 import View.LoginPanel;
@@ -90,11 +90,16 @@ public class Application {
     }
 
     // Actions when download button is clicked
-    public static void downloadButtonActionPerformed() {
-        DbDownload dbDownload = new DbDownload();
-        dbDownload.setAlwaysOnTop(true);
-        dbDownload.setVisible(true);
+    public static void dbLoadButtonActionPerformed() {
+        DbLoad dbLoad = new DbLoad();
+        dbLoad.setAlwaysOnTop(true);
+        dbLoad.setVisible(true);
     }
+
+    public static void tableLoadButtonActionPerformed() {
+
+    }
+
 
     // Refresh the tables
     public static void refreshTable() {
@@ -135,6 +140,10 @@ public class Application {
         DbUpload dbUpload = new DbUpload();
         dbUpload.setAlwaysOnTop(true);
         dbUpload.setVisible(true);
+    }
+
+    public static void downLoadButtonActionPerformed() {
+
     }
 
     // Actions when chart button is clicked

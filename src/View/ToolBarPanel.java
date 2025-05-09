@@ -64,7 +64,7 @@ public class ToolBarPanel extends javax.swing.JPanel {
         downloadButton.setFocusPainted(false);
         downloadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadButtonActionPerformed(evt);
+                downLoadButtonActionPerformed(evt);
             }
         });
         cloudPanel.add(downloadButton);
@@ -269,8 +269,8 @@ public class ToolBarPanel extends javax.swing.JPanel {
         Application.uploadButtonActionPerformed();
     }
 
-    private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        Application.downloadButtonActionPerformed();
+    private void downLoadButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        Application.downLoadButtonActionPerformed();
     }
 
     private void accountsButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -278,11 +278,11 @@ public class ToolBarPanel extends javax.swing.JPanel {
     }
 
     private void databaseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        Application.dbLoadButtonActionPerformed();
     }
 
     private void tablesButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        Application.tableLoadButtonActionPerformed();
     }
 
     private void boldButtonActionPerformed(java.awt.event.ActionEvent evt) {

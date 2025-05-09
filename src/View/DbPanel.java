@@ -7,6 +7,8 @@ package View;
 
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+
 import Controller.DbController;
 
 public class DbPanel extends javax.swing.JPanel {
@@ -23,6 +25,12 @@ public class DbPanel extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         ArrayList<String> tableNames = DbController.getTableNames(dbName);
+
+        if (tableNames.isEmpty()) {
+            JLabel label = new JLabel("No tables found in database: " + dbName, JLabel.CENTER);
+            add(label, java.awt.BorderLayout.CENTER);
+            return;
+        }
 
         for (String tableName : tableNames) {
             tabbedPanel.addTab(tableName, new TablePanel(dbName, tableName));

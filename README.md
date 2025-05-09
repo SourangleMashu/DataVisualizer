@@ -18,3 +18,15 @@ It allows users to upload CSV datasets, visualize data as bar, line, area, or pi
   - Chart image as `.jpeg`
   - Table data as `.csv`
 - 🎨 Enhanced UI with dropdowns, tooltips, and color themes
+
+---
+
+## Samples:
+
+<img src="images/ui1.png" width="500"/>
+
+<img src="images/ui2.png" width="500"/>
+
+<img src="images/ui3.png" width="500"/>
+
+<img src="images/ui4.jpeg" width="500"/>

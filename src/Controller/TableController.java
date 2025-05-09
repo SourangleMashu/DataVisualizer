@@ -40,13 +40,14 @@ public class TableController {
                 String value = firstDataRow[i];
                 String dataType = "VARCHAR(255)"; // default data type
 
-                if (value.matches("\\d+")) {
+                if (value.matches("^\\d+$")) {
                     dataType = "INT";
-                } else if (value.matches("\\d+\\.\\d+")) {
+                } else if (value.matches("^\\d+\\.\\d+$")) {
                     dataType = "FLOAT";
                 } else if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                     dataType = "TINYINT(1)";
                 }
+
 
                 query += column + " " + dataType + ", ";
             }

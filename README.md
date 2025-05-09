@@ -23,10 +23,8 @@ It allows users to upload CSV datasets, visualize data as bar, line, area, or pi
 
 ## Samples:
 
-<img src="images/ui1.png" width="500"/>
+<img src="images/ui1.png" width="800"/>
 
-<img src="images/ui2.png" width="500"/>
+<img src="images/ui2.png" width="800"/>
 
-<img src="images/ui3.png" width="500"/>
-
-<img src="images/ui4.jpeg" width="500"/>
+<img src="images/ui3.jpeg" width="800"/>

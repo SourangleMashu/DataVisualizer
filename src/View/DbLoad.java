@@ -45,7 +45,7 @@ public class DbLoad extends JDialog {
         confirmButton = new JButton("Confirm");
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Application.dbDownloadConfirmButtonActionPerformed(databaseComboBox.getSelectedItem().toString());
+                Application.dbLoadConfirmButtonActionPerformed(databaseComboBox.getSelectedItem().toString());
                 dispose();
             }
         });

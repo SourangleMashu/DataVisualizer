@@ -15,5 +15,6 @@ public class MainFrame extends JFrame {
         setTitle("Chart Generator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 }

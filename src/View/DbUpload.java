@@ -16,37 +16,35 @@ public class DbUpload extends JDialog {
     private String filePath;
 
     public DbUpload() {
-
-        // Tried to use super() to get rid of the empty JFrame after dispose.
         super(Application.mainFrame, "Upload CSV File", true);
 
-        // Center the dialog on the screen
-        setLocationRelativeTo(null);
+        // Don't show dialog layout – just trigger file picker directly
+        uploadFileAndClose();
+    }
 
-        // Create a file chooser
+    private void uploadFileAndClose() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogTitle("Select CSV File");
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
         fileChooser.setFileFilter(filter);
 
-        int result = fileChooser.showOpenDialog(this);
+        int result = fileChooser.showOpenDialog(this); // show chooser relative to this dialog
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             String fileName = selectedFile.getName();
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
-
-            // Replace backslashes with forward slashes so the file path can be used for CSV reader
             filePath = selectedFile.getAbsolutePath().replace("\\", "/");
 
-            // Create and load the table
             TableController.createTable(fileName, filePath);
             TableController.loadTable(fileName, filePath);
-        } else {
-            filePath = null;
+
+            Application.refreshTable();
         }
-        dispose();
-        Application.refreshTable();
+
+        dispose(); // always dispose after closing chooser
     }
 
     public String getFilePath() {

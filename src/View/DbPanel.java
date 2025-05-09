@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 
 import Controller.DbController;
 
+import Application.Application;
+
+
 public class DbPanel extends javax.swing.JPanel {
 
     // constructor
@@ -35,6 +38,14 @@ public class DbPanel extends javax.swing.JPanel {
         for (String tableName : tableNames) {
             tabbedPanel.addTab(tableName, new TablePanel(dbName, tableName));
         }
+
+        tabbedPanel.addChangeListener(e -> {
+            int index = tabbedPanel.getSelectedIndex();
+            if (index >= 0) {
+                Application.currentTable = tabbedPanel.getTitleAt(index);
+            }
+        });
+
 
         add(tabbedPanel, java.awt.BorderLayout.CENTER);
     }

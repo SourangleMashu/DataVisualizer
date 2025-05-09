@@ -33,6 +33,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 //import org.pushingpixels.radiance.theming.api.skin.RadianceNightShadeLookAndFeel;
 
 import Controller.DbController;
+import Controller.TableController;
 import View.DataChooser;
 import View.DbLoad;
 import View.DbPanel;
@@ -100,49 +101,55 @@ public class Application {
 
     }
 
-
     // Refresh the tables
     public static void refreshTable() {
-        if (dbPanel != null) {
-            currentTable = dbPanel.getCurrentTableName();
-            currentTableIndex = dbPanel.tabbedPanel.getSelectedIndex();
-            mainPanel.removeAll();
-            dbPanel = null;
-        }
-        mainPanel.add(toolBarPanel);
-
-        DbController.useDatabase(currentDb);
-        dbPanel = new DbPanel(currentDb);
-        dbPanel.setBounds(0, 175, 1920, 810);
-        mainPanel.add(dbPanel);
-        dbPanel.tabbedPanel.setSelectedIndex(currentTableIndex);
-
-        // Timer used to avoid the bug of not showing the table
-        // Maybe because of the thread trying to load data and paint the GUI at the same
-        // time?
-        TimerTask task = new TimerTask() {
-            public void run() {
-                dbPanel.revalidate();
-                mainPanel.revalidate();
-            }
-        };
-        timer.schedule(task, 500);
+    if (dbPanel != null) {
+        currentTable = dbPanel.getCurrentTableName();
+        currentTableIndex = dbPanel.tabbedPanel.getSelectedIndex();
+        mainPanel.removeAll();
+        dbPanel = null;
     }
 
+    mainPanel.add(toolBarPanel);
+
+    DbController.useDatabase(currentDb);
+    dbPanel = new DbPanel(currentDb);
+    dbPanel.setBounds(0, 175, 1920, 810);
+    mainPanel.add(dbPanel);
+
+    if (dbPanel.tabbedPanel.getTabCount() > 0) {
+        dbPanel.tabbedPanel.setSelectedIndex(currentTableIndex);
+        currentTable = dbPanel.getCurrentTableName();
+    }
+
+    TimerTask task = new TimerTask() {
+        public void run() {
+            dbPanel.revalidate();
+            mainPanel.revalidate();
+        }
+    };
+    timer.schedule(task, 500);
+}
+
     // Actions when database download confirm button is clicked
-    public static void dbDownloadConfirmButtonActionPerformed(String dbName) {
+    public static void dbLoadConfirmButtonActionPerformed(String dbName) {
         currentDb = dbName;
-        refreshTable();
+        refreshTable(); 
     }
 
     // Actions when database upload confirm button is clicked
     public static void uploadButtonActionPerformed() {
-        DbUpload dbUpload = new DbUpload();
-        dbUpload.setAlwaysOnTop(true);
-        dbUpload.setVisible(true);
+        new DbUpload();
     }
 
     public static void downLoadButtonActionPerformed() {
+        // Export only if there’s a valid table selected
+        if (dbPanel != null && dbPanel.tabbedPanel.getTabCount() > 0) {
+            currentTable = dbPanel.getCurrentTableName();
+            TableController.exportTableToCSV(currentTable, "./" + currentTable + ".csv");
+        } else {
+            System.out.println("No table to export.");
+        }    
 
     }
 

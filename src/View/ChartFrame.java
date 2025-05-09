@@ -1,68 +1,116 @@
 package View;
 
-/*
- * This class creates a JFrame to display a bar chart 
- * and a button to download the chart as an image.
- */
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtils;
-import org.jfree.chart.JFreeChart;
+import javax.swing.*;
+
+import org.jfree.chart.*;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import Application.Application;
 
 public class ChartFrame extends JFrame {
 
-    // Constructor
+    private JComboBox<String> chartTypeComboBox;
+    private ChartPanel chartPanel;
+    private JFreeChart chart;
+
     public ChartFrame() {
         init();
     }
 
     private void init() {
-
-        // Create a bar chart
-        JFreeChart chart = ChartFactory.createBarChart(
-                "Bar Chart", // Chart title
-                DataChooser.column1, // X-axis label
-                DataChooser.column2, // Y-axis label
-                Application.dataset // Dataset
-        );
-
-        // Create a JFrame to display the chart
+        setTitle("Chart Viewer");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 400);
+        setSize(800, 600);
+        setLayout(new BorderLayout());
 
-        // Create a ChartPanel and add the chart to it
-        ChartPanel chartPanel = new ChartPanel(chart);
+        // Chart type combo box
+        String[] chartTypes = {"Bar Chart", "Line Chart", "Area Chart"};
+        chartTypeComboBox = new JComboBox<>(chartTypes);
+        chartTypeComboBox.addActionListener(e -> updateChart());
 
-        // Add the chart panel to the frame
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel("Chart Type:"));
+        topPanel.add(chartTypeComboBox);
+        add(topPanel, BorderLayout.NORTH);
+
+        // Create initial chart and panel
+        chart = createChart("Bar Chart");
+        chartPanel = new ChartPanel(chart);
         add(chartPanel, BorderLayout.CENTER);
 
-        // Create a download chart button
+        // Download button
         JButton downloadButton = new JButton("Download Chart");
-        downloadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                File imageFile = new File("BarChart.jpeg");
-
-                try {
-                    ChartUtils.saveChartAsJPEG(imageFile, chart, 800, 600);
-                    System.out.println("Chart saved as image.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        downloadButton.addActionListener(e -> {
+            try {
+                ChartUtils.saveChartAsJPEG(new File("Chart.jpeg"), chart, 800, 600);
+                System.out.println("Chart saved.");
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         });
-
-        // Add the download button to the frame
         add(downloadButton, BorderLayout.SOUTH);
+    }
+
+    private void updateChart() {
+        String selectedType = (String) chartTypeComboBox.getSelectedItem();
+        chart = createChart(selectedType);
+        remove(chartPanel);
+        chartPanel = new ChartPanel(chart);
+        add(chartPanel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
+    private JFreeChart createChart(String type) {
+        String title = type;
+        String xLabel = DataChooser.column1;
+        String yLabel = DataChooser.column2;
+        DefaultCategoryDataset dataset = Application.dataset;
+
+        JFreeChart chart;
+
+        switch (type) {
+            case "Line Chart":
+                chart = ChartFactory.createLineChart(title, xLabel, yLabel, dataset);
+                break;
+            case "Area Chart":
+                chart = ChartFactory.createAreaChart(title, xLabel, yLabel, dataset);
+                break;
+            default:
+                chart = ChartFactory.createBarChart(title, xLabel, yLabel, dataset);
+                break;
+        }
+
+        // Style chart and plot
+        chart.setBackgroundPaint(Color.WHITE);
+        chart.getTitle().setFont(new Font("SansSerif", Font.BOLD, 18));
+
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setOutlineVisible(false);
+
+        plot.getDomainAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+        plot.getRangeAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+
+        if (plot.getRenderer() instanceof BarRenderer) {
+            BarRenderer renderer = (BarRenderer) plot.getRenderer();
+            renderer.setDrawBarOutline(false);
+            renderer.setBarPainter(new StandardBarPainter());
+            renderer.setSeriesPaint(0, new Color(79, 129, 189));
+            renderer.setItemMargin(0.05);
+        }
+
+        return chart;
     }
 }
